@@ -1,0 +1,5 @@
+PGUSER=postgres
+PGHOST=localhost
+PGDATABASE=Pan_African_Pharmaceutical
+PGPASSWORD=@#albert5
+PGPORT=5432
