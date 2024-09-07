@@ -18,28 +18,34 @@ const pool = new Pool({
     port: process.env.PGPORT,
 });
 
-// API route to collect data
-app.post('/api/users', async (req, res) => {
-    const { name, email } = req.body;
+// Middleware to parse JSON
+app.use(express.json());
+
+// POST route to add drugshop data
+app.post('/api/drugshops', async (req, res) => {
+    const {
+        serialNumber,
+        nameDrugshop,
+        physicalAddress,
+        fulltimeIncharge,
+        qualification,
+        district,
+    } = req.body;
+
     try {
+        // Insert into your table with the matching fields
         const result = await pool.query(
-            'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-            [name, email]
+            'INSERT INTO drugshops (S_N, NAME_DRUGSHOP, PHYSICAL_ADDRESS, FULLTIME_INCHARGE, QUALIFICATION, DISTRICT) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [serialNumber, nameDrugshop, physicalAddress, fulltimeIncharge, qualification, district]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
     }
 });
 
-// Serve static files from the React app (client/build)
-app.use(express.static(path.join(__dirname, '../client/build')));
-
-// Catch-all route to serve the React app for unknown routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+// Listen on a port
+app.listen(5454, () => {
+    console.log('Server running on http://localhost:5454');
 });
-
-const PORT = process.env.PORT || 5454;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

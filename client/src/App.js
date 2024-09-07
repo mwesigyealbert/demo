@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
 
 function App() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const [serialNumber, setSerialNumber] = useState('');
+    const [nameDrugshop, setNameDrugshop] = useState('');
+    const [physicalAddress, setPhysicalAddress] = useState('');
+    const [fulltimeIncharge, setFulltimeIncharge] = useState('');
+    const [qualification, setQualification] = useState('');
+    const [district, setDistrict] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5454/api/users', {
+            const response = await fetch('http://localhost:5454/api/drugshops', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email }),
+                body: JSON.stringify({
+                    serialNumber,
+                    nameDrugshop,
+                    physicalAddress,
+                    fulltimeIncharge,
+                    qualification,
+                    district,
+                }),
             });
             const data = await response.json();
-            console.log('User added:', data);
+            console.log('Drugshop added:', data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -23,19 +34,43 @@ function App() {
 
     return (
         <div>
-            <h1>Data Collection Form</h1>
+            <h1>Drugshop Data Collection Form</h1>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
-                    placeholder="Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Serial Number"
+                    value={serialNumber}
+                    onChange={(e) => setSerialNumber(e.target.value)}
                 />
                 <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="text"
+                    placeholder="Name of Drugshop"
+                    value={nameDrugshop}
+                    onChange={(e) => setNameDrugshop(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Physical Address"
+                    value={physicalAddress}
+                    onChange={(e) => setPhysicalAddress(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Fulltime Incharge"
+                    value={fulltimeIncharge}
+                    onChange={(e) => setFulltimeIncharge(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Qualification"
+                    value={qualification}
+                    onChange={(e) => setQualification(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="District"
+                    value={district}
+                    onChange={(e) => setDistrict(e.target.value)}
                 />
                 <button type="submit">Submit</button>
             </form>
